@@ -5,8 +5,6 @@ const errorController = require('./controllers/error');
 
 const db = require('./util/database');
 
-require('dotenv').config();
-
 
 const app = express();
 
@@ -16,7 +14,6 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-db.execute('SELECT * FROM products');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,4 +23,6 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+app.listen(3000,()=>{
+    console.log("Server is running")
+});
