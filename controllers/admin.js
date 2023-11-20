@@ -5,11 +5,13 @@ const Product = require('../models/product');
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
-    path: '/admin/add-product',//this is used for highlighting navigation item
+    path: '/admin/add-product',
     editing :false
 
   });
 };
+
+
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
@@ -22,21 +24,8 @@ exports.postAddProduct = (req, res, next) => {
     res.redirect('/')})
   .catch(err=>console.log(err));
 };
-
-//here we will pass edit product info
-/*Editing a product : using id to edit the poduct and save it by not creatingh 
-a new product rather replacing the xisting one*/
-
-/*Query Parameter - they are provided in the url
-they can be added to a url by adding a question mark (?)
-and key -value pair separted by = and multiple pairs by &
-
-e.g., ?edit=true&title=new
-also called optional data
-
-The route is determined upto the querstion mark*/
 exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.edit;// Note: The extracted value is always a string so "true" instead of true
+  const editMode = req.query.edit;
   if(!editMode) return res.redirect('/'); 
   const prodId = req.params.productId;  
   Product.findById(prodId, product =>{
@@ -45,12 +34,10 @@ exports.getEditProduct = (req, res, next) => {
       pageTitle: 'Edit Product',
       path: '/admin/edit-product',
       editing:editMode,
-      product:product//this is used for highlighting navigation item
-    });
+      product:product    });
   })
   
 };
-/*Here we will get the product, edit it and replace it with the exising one */
 exports.postEditProducts = (req,res)=>{
 
   const prodId = req.body.productId;
@@ -76,14 +63,13 @@ exports.deleteProduct = (req,res)=>{
 }
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
+  Product.fetchAll()
+  .then(([rows,fieldData])=>{
     res.render('admin/products', {
-      prods: products,
+      prods: rows,
       pageTitle: 'Admin Products',
       path: '/admin/products'
     });
-  });
-};
-// exports.getContactPage = (req,res)=>{
-//   res.sendFile(path.join(rootDir,'views','contactus.html'));
-// }
+  })
+  .catch(err=>console.log(err));
+}
