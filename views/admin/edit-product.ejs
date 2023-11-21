@@ -22,7 +22,7 @@
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea name="description" id="description" rows="5"><% if (editing) {%><%= product.title %><%}%></textarea>
+                <input type="text" name="description" id="description" rows="5"value="<% if (editing) {%><%= product.description %><%}%>">
             </div>
             <% if(editing) { %>
                 <input type="hidden" value="<%= product.id %>" name = "productId">
