@@ -41,10 +41,12 @@ app.use(errorController.get404);
 Product.belongsTo(User,{constraints:true, onDelete:'CASCADE'});
 User.hasMany(Product);
 User.hasOne(Cart);
-Cart.belongsTo(User,{through:CartItem});
+Cart.belongsTo(User);
+
+Cart.belongsToMany(Product,{through:CartItem});
 Product.belongsToMany(Cart,{through:CartItem});
 
-sequelize.sync()
+sequelize.sync({force:false})
 .then(res=>{
     // console.log(res);
     //create a user
